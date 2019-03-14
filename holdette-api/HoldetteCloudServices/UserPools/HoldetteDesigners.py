@@ -1,0 +1,2 @@
+class HoldetteDesigners(GenericUserPool):
+	pass
