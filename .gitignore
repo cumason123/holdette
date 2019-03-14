@@ -364,5 +364,21 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/node,macos,flask,python,pycharm
 
-# config file
+# Filtering out all possible configuration filenames
+configs.txt
+config.txt
+
+configs.csv
 config.csv
+
+config.json
+configs.json
+
+configuration.txt
+configurations.txt
+
+configuration.csv
+configurations.csv
+
+configuration.json
+configurations.json
