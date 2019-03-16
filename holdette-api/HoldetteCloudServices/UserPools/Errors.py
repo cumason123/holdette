@@ -1,0 +1,6 @@
+class Error():
+	ERROR = -1
+	SUCCESS = 0
+	USER_EXISTS = 1
+	INVALID_CREDENTIALS = 2
+	
