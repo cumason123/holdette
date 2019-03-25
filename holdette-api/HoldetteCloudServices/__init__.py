@@ -25,10 +25,10 @@ class Cloud():
 		self.iam = self.configs['iam-role']
 		self.holdette_consumers = UserPool(self.configs['holdette-consumers']['user-pool'], self.configs['iam-role'])
 		self.holdette_designers = UserPool(self.configs['holdette-designers']['user-pool'], self.configs['iam-role'])
+		
 		self.s3_client = boto3.client('s3', 
 			aws_access_key_id = self.iam['access-key'], 
-			aws_secret_access_key = self.iam['access-secret'],
-			region_name = self.pool_region
+			aws_secret_access_key = self.iam['access-secret']
 		)
 
 	def consumerRegister(self, data):
