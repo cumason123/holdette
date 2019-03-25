@@ -10,7 +10,7 @@ from jwt.algorithms import RSAAlgorithm
 import jwt
 from jose import jwt as jt, jwk as jk
 import re
-from Errors import Error
+from ..Errors import Error
 
 class UserPool():
 	error = Error()
@@ -22,10 +22,12 @@ class UserPool():
 			self.required_attributes = pool_dict['pool-required-attributes']
 			self.pool_region = pool_dict['pool-region']
 			self.keys_url = 'https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json'.format(self.pool_region, self.pool_id)
+			self.iam_dict = iam_dict.copy()
+
 			self.client = boto3.client('cognito-idp', 
-				aws_access_key_id=iam_dict['access-key'], 
-				aws_secret_access_key=iam_dict['access-secret'],
-				region_name=self.pool_region
+				aws_access_key_id = self.iam_dict['access-key'], 
+				aws_secret_access_key = self.iam_dict['access-secret'],
+				region_name = self.pool_region
 				)
 			# https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
 			response = req.urlopen(self.keys_url)

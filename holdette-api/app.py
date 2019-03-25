@@ -59,13 +59,14 @@ def loginConsumer():
 			return {'Error': result}, status.HTTP_400_BAD_REQUEST
 
 		else:
-			return state, status.HTTP_200_OK
+			return result, status.HTTP_400_BAD_REQUEST
 
 @app.route("/upload-product", methods=['GET'])
 def uploadProduct():
 	if request.method == 'POST':
 		data = request.form.to_dict(flat=False)
 		state, result = cloud.designerUploadProduct(data)
+		return result, status.HTTP_200_OK
 
 
 if __name__ == '__main__':
