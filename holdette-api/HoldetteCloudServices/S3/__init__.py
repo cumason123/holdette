@@ -9,5 +9,5 @@ class Bucket():
 		)
 
 	def upload_item(self, file_contents, username, product_name):
-		if '*' in username or ''
-		filename = '*'.join()
+		if '*' in username or '/' in username:
+			filename = '*'.join()

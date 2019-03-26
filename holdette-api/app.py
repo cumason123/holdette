@@ -61,7 +61,7 @@ def loginConsumer():
 		else:
 			return result, status.HTTP_400_BAD_REQUEST
 
-@app.route("/upload-product", methods=['GET'])
+@app.route("/upload-product", methods=['POST'])
 def uploadProduct():
 	if request.method == 'POST':
 		data = request.form.to_dict(flat=False)

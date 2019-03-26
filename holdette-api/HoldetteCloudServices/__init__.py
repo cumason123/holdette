@@ -46,20 +46,29 @@ class Cloud():
 		raise NotImplementedError()
 
 	def designerUploadProduct(self, data):
-		return self.holdette_designers.validate_access_token(data['access-token'])
-# if 'username' not in data.keys() or 'access-key' not in data.keys():
-# 	return self.error.INVALID_CREDENTIALS, 'Missing access key or username'
+		if 'username' not in data.keys() or 'access-token' not in data.keys():
+			return self.error.INVALID_CREDENTIALS, 'Missing access key or username'
 
-# state, result = self.holdette_designers.validate_access_token(data['access-token'])
-# if state == self.error.SUCCESS:
-# 	assert(result[''])
-# 	try:
-# 		product = Product(data)
-# 	except AssertionError():
+		state, validation = self.holdette_consumers.validate_access_token(data['access-token'][0])
+		if state == self.error.SUCCESS:
+			username = validation['username']
+			if (username != data['username'][0]):
+				return self.error.INVALID_CREDENTIALS, 'Incorrect username for session key'
+			product = Product(data)
 
-# self.s3_client.
+			if product == {}:
+				return self.error.INVALID_CREDENTIALS, 'Missing required product attributes'
 
-# return state, result
+			image = product['image']
+			product.pop('image')
+
+
+
+		return state, {'success': 200}
+
+
+
+
 
 
 
