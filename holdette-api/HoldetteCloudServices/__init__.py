@@ -4,7 +4,7 @@ import os
 import sys
 import json
 from .UserPools import UserPool
-from .Products import Product
+from .Products import valid_product
 from .Errors import Error
 # from UserPools import UserPool
 # from Products import Product
@@ -54,18 +54,14 @@ class Cloud():
 			username = validation['username']
 			if (username != data['username'][0]):
 				return self.error.INVALID_CREDENTIALS, 'Incorrect username for session key'
-			product = Product(data)
 
-			if product == {}:
+			product = valid_product(data)
+
+			if product == None:
 				return self.error.INVALID_CREDENTIALS, 'Missing required product attributes'
 
-			image = product['image']
-			product.pop('image')
-
-
-
-		return state, {'success': 200}
-
+			return state, {'success': 200}
+		return state, validation
 
 
 

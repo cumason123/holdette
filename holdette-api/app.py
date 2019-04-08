@@ -1,7 +1,9 @@
 from flask import url_for, request
 from flask_api import FlaskAPI, status, exceptions
 from HoldetteCloudServices import Cloud
-
+import cv2
+import io
+import numpy as np
 app = FlaskAPI(__name__)
 cloud = Cloud()
 
@@ -65,8 +67,18 @@ def loginConsumer():
 def uploadProduct():
 	if request.method == 'POST':
 		data = request.form.to_dict(flat=False)
-		state, result = cloud.designerUploadProduct(data)
-		return result, status.HTTP_200_OK
+		#read image file string data
+		filestr = request.files['image'].read()
+		#convert string data to numpy array
+		npimg = np.fromstring(filestr, np.uint8)
+		# convert numpy array to image
+		img = cv2.imdecode(npimg, 1)
+		cv2.imshow('img', img)
+
+
+		return '200'
+		# state, result = cloud.designerUploadProduct(data)
+		# return result, status.HTTP_200_OK
 
 
 if __name__ == '__main__':

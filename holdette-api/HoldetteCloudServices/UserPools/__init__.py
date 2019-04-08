@@ -115,15 +115,12 @@ class UserPool():
 
 		# TODO Timezone auth expiration issues?
 		try:
-			print(bearer_token)
 			headers = jt.get_unverified_headers(bearer_token)
 
 			key_index = -1
-			print(headers)
 			kid = headers['kid']
 
 			for i in range(len(self.keys)):
-				print(self.keys[i]['kid'])
 				if kid == self.keys[i]['kid']:
 					key_index = i
 					break
