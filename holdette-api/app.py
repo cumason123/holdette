@@ -67,19 +67,13 @@ def loginConsumer():
 def uploadProduct():
 	if request.method == 'POST':
 		data = request.form.to_dict(flat=False)
-		#read image file string data
-		filestr = request.files['image'].read()
-		#convert string data to numpy array
-		npimg = np.fromstring(filestr, np.uint8)
-		# convert numpy array to image
-		img = cv2.imdecode(npimg, 1)
-		cv2.imshow('img', img)
 
+		npimg = np.fromfile(request.files['image'], np.uint8)
+		img = cv2.imdecode(npimg, cv2,COLOR_BGR2RGB)
 
+        data['image'] = img
+        state, result = cloud.designerUploadProduct(data)
 		return '200'
-		# state, result = cloud.designerUploadProduct(data)
-		# return result, status.HTTP_200_OK
-
 
 if __name__ == '__main__':
 	app.run()
