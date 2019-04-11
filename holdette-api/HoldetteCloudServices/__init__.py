@@ -31,6 +31,11 @@ class Cloud():
 			aws_secret_access_key = self.iam['access-secret']
 		)
 
+		# self.db = boto3.client('rds', 
+		# 	aws_access_key_id = self.iam['access-key'], 
+		# 	aws_secret_access_key = self.iam['access-secret'],
+		# 	aws_region='us-east-1'
+		# )
 	def consumerRegister(self, data):
 		return self.holdette_consumers.register(data)
 
@@ -59,7 +64,7 @@ class Cloud():
 
 			if product == None:
 				return self.error.INVALID_CREDENTIALS, 'Missing required product attributes'
-
+			# MySQL Upload Functionality
 			return state, {'success': 200}
 		return state, validation
 

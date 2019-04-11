@@ -14,7 +14,7 @@ def registerConsumer():
 		state, result = cloud.consumerRegister(data)
 
 		if state == Cloud.error.SUCCESS:
-			return state, status.HTTP_200_OK
+			return result, status.HTTP_200_OK
 
 		elif state == Cloud.error.ERROR:
 			return {'Error': result}, status.HTTP_400_BAD_REQUEST
@@ -68,11 +68,12 @@ def uploadProduct():
 	if request.method == 'POST':
 		data = request.form.to_dict(flat=False)
 
-		npimg = np.fromfile(request.files['image'], np.uint8)
-		img = cv2.imdecode(npimg, cv2,COLOR_BGR2RGB)
-
-        data['image'] = img
-        state, result = cloud.designerUploadProduct(data)
+		# Append image to data
+		# npimg = np.fromfile(request.files['image'], np.uint8)
+		# data['image'] = cv2.imdecode(npimg, cv2,COLOR_BGR2RGB)
+		data['image'] = request.files['image']
+		print(type(data['image']))
+		# state, result = cloud.designerUploadProduct(data)
 		return '200'
 
 if __name__ == '__main__':
