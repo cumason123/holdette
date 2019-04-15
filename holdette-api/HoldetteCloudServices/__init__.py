@@ -6,6 +6,7 @@ import json
 from .UserPools import UserPool
 from .Products import valid_product
 from .Errors import Error
+import uuid
 # from UserPools import UserPool
 # from Products import Product
 # from Errors import Error
@@ -26,10 +27,11 @@ class Cloud():
 		self.holdette_consumers = UserPool(self.configs['holdette-consumers']['user-pool'], self.configs['iam-role'])
 		self.holdette_designers = UserPool(self.configs['holdette-designers']['user-pool'], self.configs['iam-role'])
 		
-		self.s3_client = boto3.client('s3', 
+		self.s3 = boto3.resource('s3', 
 			aws_access_key_id = self.iam['access-key'], 
 			aws_secret_access_key = self.iam['access-secret']
 		)
+		self.s3_bucket = self.s3.resource('holdette-products')
 
 		# self.db = boto3.client('rds', 
 		# 	aws_access_key_id = self.iam['access-key'], 
@@ -64,7 +66,13 @@ class Cloud():
 
 			if product == None:
 				return self.error.INVALID_CREDENTIALS, 'Missing required product attributes'
+
+
+			self.s3_bucket.upload_fileobj(data['image'], os.path.join(data['username'], str(uuid.uuid4()).replace('-', '')))
+
 			# MySQL Upload Functionality
+
+
 			return state, {'success': 200}
 		return state, validation
 
