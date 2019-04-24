@@ -4,3 +4,4 @@ pandas
 boto3
 pyjwt
 python-jose
+sqlalchemy
