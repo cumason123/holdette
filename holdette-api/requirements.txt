@@ -5,3 +5,4 @@ boto3
 pyjwt
 python-jose
 sqlalchemy
+mysql-connector
