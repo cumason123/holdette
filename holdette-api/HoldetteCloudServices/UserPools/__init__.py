@@ -67,11 +67,7 @@ class UserPool():
 		password = data['password'][0]
 		try:
 			hashCode = self.getSecretHash(username)
-			resp = self.client.sign_up(
-				ClientId=self.client_id,
-				SecretHash=hashCode,
-				Username=username,
-				Password=password,
+			resp = self.client.admin_create_user(
 				UserAttributes=user_attributes)
 			print(resp)
 
@@ -100,10 +96,13 @@ class UserPool():
 			
 		except self.client.exceptions.NotAuthorizedException as e:
 			return self.error.INVALID_CREDENTIALS, "The username or password is incorrect"
-
+		except self.client.exceptions.UserNotFoundException as e:
+			print(e)
+			return self.error.INVALID_CREDENTIALS, "The username or password is incorrect"
 		except Exception as e:
 			print(e)
 			return self.error.ERROR, "Internal Server Error"
+
 		print(resp)
 		return self.error.SUCCESS, resp
 

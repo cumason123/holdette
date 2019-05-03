@@ -1,3 +1,7 @@
+import uuid
+import time
+import os
+import boto3
 class Bucket():
 	def __init__(self, bucket_name, iam_role):
 		self.bucket_name = bucket_name
@@ -8,6 +12,7 @@ class Bucket():
 			aws_secret_access_key = self.iam_role['access-secret']
 		)
 
-	def upload_item(self, file_contents, username, product_name):
-		if '*' in username or '/' in username:
-			filename = '*'.join()
+	def upload_item(self, image, vendor):
+		filename = str(time.time()).replace('.', '') + str(uuid.uuid4()).replace('-', '')
+		filename = os.path.join(vendor, unique_identifier)
+		self.s3_client.upload_fileobj(image, 'holdette-products', filename)

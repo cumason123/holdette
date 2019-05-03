@@ -1,27 +1,43 @@
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, VARCHAR, UniqueConstraint
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.dialects.mysql import TINYTEXT, INTEGER
+
+
+Base = delcarative_base()
+
+class Vendor(Base):
+	__tablename__ = 'vendor'
+	vid = Column('vid', VARCAR(64), primary_key=True)
+
+class ProductState(Base):
+	__tablename__ = 'ProductState'
+	psid = Column('psid', Integer, primary_key=True)
+	state = Column('state', VARCHAR(16))
+
+class Tag(Base):
+	__tablename__ = 'Tag'
+	tag_name = Column('name', VARCHAR(32), primary_key=True)
+
+class Size(Base):
+	size = Column('size', VARCHAR(16), primary_key=True)
+
+class Product(Base):
+	pid = Column('pid', Integer, primary_key=True)
+	username = Column('username', VARCHAR(64), nullable=False, unique=True)
+	uri = Column('uri', TINYTEXT, nullable=False)
+	price = Column('price', INTEGER(unsigned=True), nullable=False)
+	stock = Column('stock', INTEGER(unsigned=True), nullable=False)
+	description = Column('description', TINYTEXT)
+	title = Column('title', TINYTEXT)
+	state = Column('state', INTEGER(unsigned=True), nullable=False, default=0)
+	relationship('')
+
+
 use holdettedb;
 
 
 --     TODO: Create Vendor Settings Data columns
-create table Vendors (
-    vid varchar(64) not null unique,
-    primary key (vid)
-);
-
-create table ProductStates (
-    psid int unsigned not null auto_increment unique,
-    state varchar(16) unique,
-    primary key (psid)
-);
-
-create table Tags (
-    tag_name varchar(32) unique not null,
-    primary key (tag_name)
-);
-
-create table Sizes (
-    size varchar(16) unique not null,
-    primary key (size)
-);
 
 create table Products (
     pid int unsigned not null unique auto_increment,
