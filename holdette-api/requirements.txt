@@ -1,0 +1,9 @@
+Flask
+flask_api
+pandas
+boto3
+pyjwt
+python-jose
+sqlalchemy
+mysql-connector
+opencv-python

@@ -10,8 +10,9 @@ from jwt.algorithms import RSAAlgorithm
 import jwt
 from jose import jwt as jt, jwk as jk
 import re
-from .Errors import Error
-class UserPoolAPI():
+from ..Errors import Error
+
+class UserPool():
 	error = Error()
 	def __init__(self, pool_dict, iam_dict):
 		try:
@@ -21,10 +22,12 @@ class UserPoolAPI():
 			self.required_attributes = pool_dict['pool-required-attributes']
 			self.pool_region = pool_dict['pool-region']
 			self.keys_url = 'https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json'.format(self.pool_region, self.pool_id)
+			self.iam_dict = iam_dict.copy()
+
 			self.client = boto3.client('cognito-idp', 
-				aws_access_key_id=iam_dict['access-key'], 
-				aws_secret_access_key=iam_dict['access-secret'],
-				region_name=self.pool_region
+				aws_access_key_id = self.iam_dict['access-key'], 
+				aws_secret_access_key = self.iam_dict['access-secret'],
+				region_name = self.pool_region
 				)
 			# https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
 			response = req.urlopen(self.keys_url)
@@ -64,11 +67,7 @@ class UserPoolAPI():
 		password = data['password'][0]
 		try:
 			hashCode = self.getSecretHash(username)
-			resp = self.client.sign_up(
-				ClientId=self.client_id,
-				SecretHash=hashCode,
-				Username=username,
-				Password=password,
+			resp = self.client.admin_create_user(
 				UserAttributes=user_attributes)
 			print(resp)
 
@@ -80,7 +79,7 @@ class UserPoolAPI():
 			print(e)
 			return self.error.ERROR, "Oops! Unknown error, please recheck fields!"
 
-		return resp, None
+		return self.error.SUCCESS, resp
 
 
 	def login(self, username, password):
@@ -97,12 +96,15 @@ class UserPoolAPI():
 			
 		except self.client.exceptions.NotAuthorizedException as e:
 			return self.error.INVALID_CREDENTIALS, "The username or password is incorrect"
-
+		except self.client.exceptions.UserNotFoundException as e:
+			print(e)
+			return self.error.INVALID_CREDENTIALS, "The username or password is incorrect"
 		except Exception as e:
 			print(e)
 			return self.error.ERROR, "Internal Server Error"
+
 		print(resp)
-		return resp, None
+		return self.error.SUCCESS, resp
 
 	def validate_access_token(self, bearer_token):
 		"""
@@ -115,8 +117,8 @@ class UserPoolAPI():
 			headers = jt.get_unverified_headers(bearer_token)
 
 			key_index = -1
-			print(headers)
 			kid = headers['kid']
+
 			for i in range(len(self.keys)):
 				if kid == self.keys[i]['kid']:
 					key_index = i
@@ -129,7 +131,7 @@ class UserPoolAPI():
 
 			publicKey = RSAAlgorithm.from_jwk(json.dumps(jwkValue))
 			decoded_token = jwt.decode(bearer_token, publicKey, algorithm=jwkValue['alg'])
-			return decoded_token, None
+			return self.error.SUCCESS, decoded_token
 
 		except jwt.exceptions.ExpiredSignatureError as e:
 			return self.error.EXPIRED_TOKEN, 'Expired token. Please refresh session.'
