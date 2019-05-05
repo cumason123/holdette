@@ -16,7 +16,7 @@ jobs:
           command: |
             pip install virtualenv
             virtualenv -p python3 env
-            source venv/bin/activate
+            source env/bin/activate
             pip install -r holdette-api/requirements.txt
             python3 holdette-api/tests
             deactivate
