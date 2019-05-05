@@ -14,6 +14,7 @@ jobs:
       - run:
           name: Test API
           command: |
+            sudo apt install python3-pip
             pip install virtualenv
             virtualenv -p python3 env
             source venv/bin/activate
