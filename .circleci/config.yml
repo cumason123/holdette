@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ubuntu
+      - image: python:3.7-alpine
 
     steps:
       - checkout
@@ -14,7 +14,6 @@ jobs:
       - run:
           name: Test API
           command: |
-            apt install python3-pip
             pip install virtualenv
             virtualenv -p python3 env
             source venv/bin/activate
