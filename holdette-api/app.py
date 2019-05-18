@@ -4,6 +4,7 @@ from HoldetteCloudServices import Cloud
 import cv2
 import io
 import numpy as np
+
 app = FlaskAPI(__name__)
 cloud = Cloud()
 
